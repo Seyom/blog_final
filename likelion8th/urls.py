@@ -1,8 +1,8 @@
-
 from django.contrib import admin
 from django.urls import path,include
 import wordcount.urls
 from blog.views import *
+import account.urls
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -16,7 +16,8 @@ urlpatterns = [
     path('blog/create',create, name = "create"),
     path('blog/edit/<int:blog_id>',edit, name = "edit"),
     path('blog/update/<int:blog_id>',update, name = "update"),
-    path('blog/delete/<int:blog_id>',delete, name = "delete")
+    path('blog/delete/<int:blog_id>',delete, name = "delete"),
+    path('account/',include(account.urls)),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 # + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -18,7 +18,7 @@ def detail(request,blog_id):
 def new(request):
     if request.method == 'POST':
         form = BlogForm(request.POST, request.FILES)
-        if form.is_vaild():
+        if form.is_valid():
             content = form.save(commit=False)
             content.pub_date = timezone.now()
             content.save()
