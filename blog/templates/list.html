@@ -1,7 +1,17 @@
-<h1>Blog Project</h1>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  </head>
+
+
+<div class="jumbotron text-center">
+    <h1>Seyeon blog</h1>
 <a href ="{%url 'new' %}">새 글 작성하기</a>
 
-<div>
+<div style="text-align: right; margin: 10px;">
     {% if user.is_authenticated %}
         <h3>안녕하세요 {{user.username}}님</h3>
     {% endif %}
@@ -24,7 +34,7 @@
 {{blog.summary}}
 <br>
 {% if blog.img %}
-    <img src="{{ blog.img.url }}">
+    <img src="{{ blog.img.url }}" class="img-rounded" alt="Cinque Terre" width="304" height="auto">
 {% endif %}
 
 

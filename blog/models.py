@@ -1,19 +1,27 @@
 from django.db import models
+from django.conf import settings
 
 # Create your models here.
 
 class Blog(models.Model):
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=100)
     pub_date = models.DateTimeField()
     body = models.TextField()
-    img = models.ImageField(upload_to="blog/") #media/파일이름 저장되게 세팅.파이에서 했는데 미디어/블로그/파일이름 으로 저장되게 한거
+    img = models.ImageField(upload_to="blog/")
+    img = models.ImageField(upload_to="blog/", blank=True, null=True) #media/blog/파일이름
+    like = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='likers')
 
-
-# 제목을 오브젝트 123이 아닌 제목으로 보이게 해주는
     def __str__(self):
         return self.title
-# 내용을 100자만 보여주는
+    
     def summary(self):
         return self.body[:100]
 
+class Comment(models.Model):
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='comments')
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True, related_name='comments')
+    body = models.TextField()
+    pub_date = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return f"{self.author}님이 {self.blog}에 단 댓글"

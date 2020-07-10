@@ -1,5 +1,5 @@
 from django.shortcuts import render,get_object_or_404,redirect
-from .models import Blog
+from .models import *
 from django.utils import timezone
 from .form import BlogForm
 
@@ -12,8 +12,29 @@ def list(request):
 
 def detail(request,blog_id):
     blog = get_object_or_404(Blog, pk = blog_id)
-    return render(request, 'detail.html',{'blog':blog})
+    like_num = len(blog.like.all())
+    comments = Comment.objects.filter(blog=blog)
+    return render(request, 'detail.html',{'blog':blog, 'comments':comments, 'likes':like_num})
     # 404: 요청한값의 html 없을때 띄워라. 예외처리
+
+def commenting(request, blog_id):
+    new_comment = Comment()
+    new_comment.blog = get_object_or_404(Blog, pk = blog_id)
+    new_comment.author = request.user
+    new_comment.body = request.POST.get('body')
+    new_comment.save()
+
+    return redirect('/blog/' + str(blog_id))
+
+def like(request, blog_id):
+    blog = get_object_or_404(Blog, pk=blog_id)
+    if request.user in blog.like.all():
+        blog.like.set(blog.like.exclude(username=request.user))
+    else : 
+        blog.like.add(request.user)
+    blog.save()
+    return redirect('/blog/'+str(blog_id))
+
 
 def new(request):
     if request.method == 'POST':
